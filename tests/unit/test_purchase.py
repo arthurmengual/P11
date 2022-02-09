@@ -8,7 +8,7 @@ class Testpurchase:
         mocker.patch.object(server, 'competitions',
                             competitions_fixture['competitions'])
         club = clubs_fixture['clubs'][0]
-        competition = clubs_fixture['competitions'][0]
+        competition = competitions_fixture['competitions'][0]
         places = 13
         data = {'club': club, 'competition': competition, 'places': places}
         response = client.post('/purchasePlaces', data=data)
