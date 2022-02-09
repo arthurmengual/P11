@@ -25,6 +25,7 @@ class Testpurchase:
             club['points']), 'club': club['name'], 'competition': competition['name']}
         response = client.post('/purchasePlaces', data=data)
 
+        assert b'sorry, you do not have enough points' not in response.data
         assert response.status_code == 200
 
     def test_equal_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -37,4 +38,5 @@ class Testpurchase:
             club['points']-1), 'club': club['name'], 'competition': competition['name']}
         response = client.post('/purchasePlaces', data=data)
 
+        assert b'sorry, you do not have enough points' not in response.data
         assert response.status_code == 200
