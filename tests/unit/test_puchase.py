@@ -3,10 +3,38 @@ import server
 
 
 class Testpurchase:
-    def more_thant_club_points_should_return_error_message(self, client, clubs_fixture, mocker):
-        club_test = clubs_fixture['clubs'][0]
-        mocker.patch.object(server.purchasePlaces, 'club', club_test)
-        data = {'places': int(club_test['ponts']+1)}
+    def test_more_than_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
+        mocker.patch.object(server, 'clubs', clubs_fixture['clubs'])
+        mocker.patch.object(server, 'competitions',
+                            competitions_fixture['competitions'])
+        club = clubs_fixture['clubs'][0]
+        competition = competitions_fixture['competitions'][0]
+        data = {'places': int(
+            club['points']+1), 'club': club['name'], 'competition': competition['name']}
         response = client.post('/purchasePlaces', data=data)
 
         assert b'sorry, you do not have enough points' in response.data
+
+    def test_less_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
+        mocker.patch.object(server, 'clubs', clubs_fixture['clubs'])
+        mocker.patch.object(server, 'competitions',
+                            competitions_fixture['competitions'])
+        club = clubs_fixture['clubs'][0]
+        competition = competitions_fixture['competitions'][0]
+        data = {'places': int(
+            club['points']), 'club': club['name'], 'competition': competition['name']}
+        response = client.post('/purchasePlaces', data=data)
+
+        assert response.status_code == 200
+
+    def test_equal_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
+        mocker.patch.object(server, 'clubs', clubs_fixture['clubs'])
+        mocker.patch.object(server, 'competitions',
+                            competitions_fixture['competitions'])
+        club = clubs_fixture['clubs'][0]
+        competition = competitions_fixture['competitions'][0]
+        data = {'places': int(
+            club['points']-1), 'club': club['name'], 'competition': competition['name']}
+        response = client.post('/purchasePlaces', data=data)
+
+        assert response.status_code == 200
