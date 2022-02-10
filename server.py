@@ -56,7 +56,7 @@ def purchasePlaces():
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club, competitions=competitions)
     else:
-        flash('sorry you cannot purchas more than 12 places')
+        flash('sorry, you cannot purchase more than 12 places')
         return render_template('welcome.html', club=club, competitions=competitions)
 
 
