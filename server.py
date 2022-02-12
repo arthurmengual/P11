@@ -41,8 +41,6 @@ def book(competition, club):
     date_now = datetime.now().replace(microsecond=0)
     competition_date = datetime.strptime(
         foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
-    print(type(competition_date), competition_date)
-    print(type(date_now), date_now)
     if date_now < competition_date:
         if foundClub and foundCompetition:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
