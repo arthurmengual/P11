@@ -12,9 +12,12 @@ class Testpurchase:
         competition = [comp for comp in competitions_fixture['competitions']
                        if comp['name'] == 'Test past compet'][0]
         club = clubs_fixture['clubs'][0]
-        data = {'club': club, 'competitions': competition}
+        data = {'club': club['name'], 'competitions': competition['name']}
+        url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
         response = client.post(
-            f"/book/{competition['name']}/{club['name']}", data=data)
+            url, data=data)
+        print('yoyoyo', response.data, competition, club)
+        print(url)
 
         assert b'sorry, this competition allready took place' in response.data
 
