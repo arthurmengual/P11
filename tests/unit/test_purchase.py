@@ -1,6 +1,5 @@
 import pytest
 import server
-<< << << < HEAD
 
 
 class Testpurchase:
