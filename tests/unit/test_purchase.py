@@ -1,5 +1,6 @@
 import pytest
 import server
+<< << << < HEAD
 
 
 class Testpurchase:
@@ -96,3 +97,35 @@ class Testpurchase:
         expected_points = int(initial_points) - nb_of_places
 
         assert updated_points == expected_points
+
+    def test_book_past_competition_should_return_error_message(self, client, clubs_fixture, past_competitions_fixture, mocker):
+        mocker.patch.object(server, 'competitions',
+                            past_competitions_fixture)
+        mocker.patch.object(server, 'clubs',
+                            clubs_fixture)
+        competition = [comp for comp in past_competitions_fixture['competitions']
+                       if comp['name'] == 'Test past compet'][0]
+        club = clubs_fixture['clubs'][0]
+        data = {'club': club['name'], 'competitions': competition['name']}
+        url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
+        response = client.post(
+            url, data=data)
+        print('yoyoyo', response.data, competition, club)
+        print(url)
+
+        assert b'sorry, this competition allready took place' in response.data
+
+    def test_book_future_competition_should_return_error_message(self, client, clubs_fixture, past_competitions_fixture, mocker):
+        mocker.patch.object(server, 'competitions',
+                            past_competitions_fixture)
+        mocker.patch.object(server, 'clubs',
+                            clubs_fixture)
+        competition = [comp for comp in past_competitions_fixture['competitions']
+                       if comp['name'] == 'Test future compet'][0]
+        club = clubs_fixture['clubs'][0]
+        data = {'club': club['name'], 'competitions': competition['name']}
+        response = client.post(
+            f"/book/{competition['name']}/{club['name']}", data=data)
+
+        assert response.status_code == 200
+        assert b'sorry, this competition allready took place' not in response.data

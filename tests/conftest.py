@@ -30,6 +30,22 @@ def competitions_fixture():
             "name": "Test compet B",
             "date": "2020-10-22 13:30:00",
             "numberOfPlaces": "13"
+        },
+    ]}
+
+
+@pytest.fixture
+def past_competitions_fixture():
+    competitions = {'competitions': [
+        {
+            "name": "Test past compet",
+            "date": "2020-10-22 13:30:00",
+            "numberOfPlaces": "13"
+        },
+        {
+            "name": "Test future compet",
+            "date": "2020-10-22 13:30:00",
+            "numberOfPlaces": "13"
         }
     ]}
     return competitions
