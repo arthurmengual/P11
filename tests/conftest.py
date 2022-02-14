@@ -32,6 +32,7 @@ def competitions_fixture():
             "numberOfPlaces": "13"
         },
     ]}
+    return competitions
 
 
 @pytest.fixture
