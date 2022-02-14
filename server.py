@@ -38,7 +38,7 @@ def showSummary():
         return render_template('index.html')
 
 
-@app.route('/book/<competition>/<club>')
+@app.route('/book/<competition>/<club>', methods=['POST'])
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
