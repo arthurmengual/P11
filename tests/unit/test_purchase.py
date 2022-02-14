@@ -50,6 +50,7 @@ class Testpurchase:
         data = {'places': int(
             club['points']+1), 'club': club['name'], 'competition': competition['name']}
         response = client.post('/purchasePlaces', data=data)
+        print(response.data)
 
         assert b'sorry, you do not have enough points' in response.data
 
