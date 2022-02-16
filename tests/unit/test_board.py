@@ -16,7 +16,7 @@ def captured_templates(app):
         template_rendered.disconnect(record, app)
 
 
-class Testboard:
+class TestBoard:
     def test(self, client):
         response = client.get('/board')
 
