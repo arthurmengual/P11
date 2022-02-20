@@ -38,21 +38,17 @@ def showSummary():
         return render_template('index.html')
 
 
-@app.route('/book/<competition>/<club>', methods=['POST'])
+@app.route('/book/<competition>/<club>', methods=['POST', 'GET'])
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        date_now = datetime.now().replace(microsecond=0)
-        competition_date = datetime.strptime(
-            foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
-        if date_now < competition_date:
-            return render_template('booking.html', club=foundClub, competition=foundCompetition)
-        else:
-            flash("sorry, this competition allready took place")
-            return render_template('welcome.html', club=club, competitions=competitions)
+    date_now = datetime.now().replace(microsecond=0)
+    competition_date = datetime.strptime(
+        foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
+    if date_now < competition_date:
+        return render_template('booking.html', club=foundClub, competition=foundCompetition)
     else:
-        flash("Something went wrong-please try again")
+        flash("sorry, this competition allready took place")
         return render_template('welcome.html', club=club, competitions=competitions)
 
 

@@ -23,7 +23,6 @@ class Testpurchase:
         mocker.patch.object(server, 'competitions',
                             competitions_fixture['competitions'])
         club = clubs_fixture['clubs'][0]
-        initial_points = club['points']
         competition = competitions_fixture['competitions'][0]
         data = {'places': 13, 'club': club['name'],
                 'competition': competition['name']}
