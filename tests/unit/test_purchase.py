@@ -17,7 +17,7 @@ def captured_templates(app):
         template_rendered.disconnect(record, app)
 
 
-class Testpurchase:
+class TestPurchase:
     def test_more_than_12_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
         mocker.patch.object(server, 'clubs', clubs_fixture['clubs'])
         mocker.patch.object(server, 'competitions',
