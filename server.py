@@ -40,12 +40,13 @@ def showSummary():
 
 @app.route('/book/<competition>/<club>', methods=['POST', 'GET'])
 def book(competition, club):
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    foundClub = [c for c in clubs if c['name'] == club]
+    foundCompetition = [c for c in competitions if c['name'] == competition]
+    print('yoyoyo0', foundClub, foundCompetition)
     if foundClub and foundCompetition:
         date_now = datetime.now().replace(microsecond=0)
         competition_date = datetime.strptime(
-            foundCompetition['date'], '%Y-%m-%d %H:%M:%S')
+            foundCompetition[0]['date'], '%Y-%m-%d %H:%M:%S')
         if date_now < competition_date:
             return render_template('booking.html', club=foundClub, competition=foundCompetition)
         else:

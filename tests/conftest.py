@@ -50,3 +50,17 @@ def past_competitions_fixture():
         }
     ]}
     return competitions
+
+
+@pytest.fixture
+def no_competitions_fixture():
+    competitions = {'competitions': [
+    ]}
+    return competitions
+
+
+@pytest.fixture
+def no_clubs_fixture():
+    clubs = {'clubs': [
+    ]}
+    return clubs

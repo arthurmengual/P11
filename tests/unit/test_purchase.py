@@ -203,3 +203,69 @@ class TestPurchase:
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'booking.html'
+
+    def test_no_competition_to_book(self, client, clubs_fixture, competitions_fixture, no_competitions_fixture, mocker):
+        mocker.patch.object(server, 'competitions',
+                            no_competitions_fixture['competitions'])
+        mocker.patch.object(server, 'clubs',
+                            clubs_fixture['clubs'])
+        competition = competitions_fixture['competitions'][0]
+        club = clubs_fixture['clubs'][0]
+        data = {'club': club['name'], 'competitions': competition['name']}
+        url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
+        response = client.post(
+            url, data=data)
+
+        assert response.status_code == 200
+        assert b'Something went wrong-please try again' in response.data
+
+        with captured_templates(app) as templates:
+            rv = app.test_client().post(url, data=data)
+            assert rv.status_code == 200
+            assert len(templates) == 1
+            template, context = templates[0]
+            assert template.name == 'welcome.html'
+
+    def test_no_club_to_book(self, client, clubs_fixture, competitions_fixture, no_clubs_fixture, mocker):
+        mocker.patch.object(server, 'competitions',
+                            competitions_fixture['competitions'])
+        mocker.patch.object(server, 'clubs',
+                            no_clubs_fixture['clubs'])
+        competition = competitions_fixture['competitions'][0]
+        club = clubs_fixture['clubs'][0]
+        data = {'club': club['name'], 'competitions': competition['name']}
+        url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
+        response = client.post(
+            url, data=data)
+
+        assert response.status_code == 200
+        assert b'Something went wrong-please try again' in response.data
+
+        with captured_templates(app) as templates:
+            rv = app.test_client().post(url, data=data)
+            assert rv.status_code == 200
+            assert len(templates) == 1
+            template, context = templates[0]
+            assert template.name == 'welcome.html'
+
+    def test_no_club_no_competition_to_book(self, client, clubs_fixture, competitions_fixture, no_clubs_fixture, no_competitions_fixture, mocker):
+        mocker.patch.object(server, 'competitions',
+                            no_competitions_fixture['competitions'])
+        mocker.patch.object(server, 'clubs',
+                            no_clubs_fixture['clubs'])
+        competition = competitions_fixture['competitions'][0]
+        club = clubs_fixture['clubs'][0]
+        data = {'club': club['name'], 'competitions': competition['name']}
+        url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
+        response = client.post(
+            url, data=data)
+
+        assert response.status_code == 200
+        assert b'Something went wrong-please try again' in response.data
+
+        with captured_templates(app) as templates:
+            rv = app.test_client().post(url, data=data)
+            assert rv.status_code == 200
+            assert len(templates) == 1
+            template, context = templates[0]
+            assert template.name == 'welcome.html'
