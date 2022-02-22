@@ -42,7 +42,6 @@ def showSummary():
 def book(competition, club):
     foundClub = [c for c in clubs if c['name'] == club]
     foundCompetition = [c for c in competitions if c['name'] == competition]
-    print('yoyoyo0', foundClub, foundCompetition)
     if foundClub and foundCompetition:
         date_now = datetime.now().replace(microsecond=0)
         competition_date = datetime.strptime(

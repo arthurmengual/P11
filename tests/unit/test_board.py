@@ -8,7 +8,7 @@ def captured_templates(app):
     recorded = []
 
     def record(sender, template, context, **extra):
-        recorded.append((template, context))
+        recorded.append((template))
     template_rendered.connect(record, app)
     try:
         yield recorded
@@ -18,13 +18,11 @@ def captured_templates(app):
 
 class TestBoard:
     def test(self, client):
-        response = client.get('/board')
-
-        assert b'Points board' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().get('/board')
-            assert rv.status_code == 200
+            response = client.get('/board')
+            assert response.status_code == 200
+            assert b'Points board' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'board.html'

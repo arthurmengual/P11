@@ -9,7 +9,7 @@ def captured_templates(app):
     recorded = []
 
     def record(sender, template, context, **extra):
-        recorded.append((template, context))
+        recorded.append((template))
     template_rendered.connect(record, app)
     try:
         yield recorded
@@ -32,7 +32,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, you cannot purchase more than 12 places' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_12_points_should_return_200(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -50,7 +50,7 @@ class TestPurchase:
             assert b'sorry, you cannot purchase more than 12 places' not in response.data
 
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_less_than_12_points_should_return_200(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -67,7 +67,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, you cannot purchase more than 12 places' not in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_more_than_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -84,7 +84,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, you do not have enough points' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_less_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -101,7 +101,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, you do not have enough points' not in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_equal_club_points_should_return_error_message(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -118,7 +118,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, you do not have enough points' not in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_points_should_be_updated(self, client, clubs_fixture, competitions_fixture, mocker):
@@ -139,7 +139,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert updated_points == expected_points
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_book_past_competition_should_return_error_message(self, client, clubs_fixture, past_competitions_fixture, mocker):
@@ -158,7 +158,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, this competition allready took place' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_book_future_competition_should_return_error_message(self, client, clubs_fixture, past_competitions_fixture, mocker):
@@ -177,7 +177,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'sorry, this competition allready took place' not in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'booking.html'
 
     def test_no_competition_to_book(self, client, clubs_fixture, competitions_fixture, no_competitions_fixture, mocker):
@@ -195,7 +195,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'Something went wrong-please try again' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_no_club_to_book(self, client, clubs_fixture, competitions_fixture, no_clubs_fixture, mocker):
@@ -213,7 +213,7 @@ class TestPurchase:
             assert response.status_code == 200
             assert b'Something went wrong-please try again' in response.data
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
 
     def test_no_club_no_competition_to_book(self, client, clubs_fixture, competitions_fixture, no_clubs_fixture, no_competitions_fixture, mocker):
@@ -231,5 +231,5 @@ class TestPurchase:
             assert b'Something went wrong-please try again' in response.data
             assert response.status_code == 200
             assert len(templates) == 1
-            template, context = templates[0]
+            template = templates[0]
             assert template.name == 'welcome.html'
