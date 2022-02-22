@@ -26,13 +26,11 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': 13, 'club': club['name'],
                 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you cannot purchase more than 12 places' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you cannot purchase more than 12 places' in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -45,14 +43,12 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': 12, 'club': club['name'],
                 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you cannot purchase more than 12 places' not in response.data
-        assert response.status_code == 200
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you cannot purchase more than 12 places' not in response.data
+
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -65,14 +61,11 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': 11, 'club': club['name'],
                 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you cannot purchase more than 12 places' not in response.data
-        assert response.status_code == 200
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you cannot purchase more than 12 places' not in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -85,13 +78,11 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': int(
             club['points']+1), 'club': club['name'], 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you do not have enough points' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you do not have enough points' in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -104,14 +95,11 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': int(
             club['points']), 'club': club['name'], 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you do not have enough points' not in response.data
-        assert response.status_code == 200
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you do not have enough points' not in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -124,14 +112,11 @@ class TestPurchase:
         competition = competitions_fixture['competitions'][0]
         data = {'places': int(
             club['points']-1), 'club': club['name'], 'competition': competition['name']}
-        response = client.post('/purchasePlaces', data=data)
-
-        assert b'sorry, you do not have enough points' not in response.data
-        assert response.status_code == 200
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            assert response.status_code == 200
+            assert b'sorry, you do not have enough points' not in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -146,15 +131,13 @@ class TestPurchase:
         nb_of_places = 4
         data = {
             'club': club['name'], 'competition': competition['name'], 'places': nb_of_places}
-        client.post('/purchasePlaces', data=data)
-        updated_points = club['points']
-        expected_points = int(initial_points) - nb_of_places
-
-        assert updated_points == expected_points
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post('/purchasePlaces', data=data)
-            assert rv.status_code == 200
+            response = client.post('/purchasePlaces', data=data)
+            updated_points = club['points']
+            expected_points = int(initial_points) - nb_of_places
+            assert response.status_code == 200
+            assert updated_points == expected_points
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -169,14 +152,11 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         data = {'club': club['name'], 'competitions': competition['name']}
         url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
-        response = client.post(
-            url, data=data)
-
-        assert b'sorry, this competition allready took place' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post(url, data=data)
-            assert rv.status_code == 200
+            response = client.post(url, data=data)
+            assert response.status_code == 200
+            assert b'sorry, this competition allready took place' in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -191,15 +171,11 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         data = {'club': club['name'], 'competitions': competition['name']}
         url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
-        response = client.post(
-            url, data=data)
-
-        assert response.status_code == 200
-        assert b'sorry, this competition allready took place' not in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post(url, data=data)
-            assert rv.status_code == 200
+            response = client.post(url, data=data)
+            assert response.status_code == 200
+            assert b'sorry, this competition allready took place' not in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'booking.html'
@@ -213,15 +189,11 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         data = {'club': club['name'], 'competitions': competition['name']}
         url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
-        response = client.post(
-            url, data=data)
-
-        assert response.status_code == 200
-        assert b'Something went wrong-please try again' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post(url, data=data)
-            assert rv.status_code == 200
+            response = client.post(url, data=data)
+            assert response.status_code == 200
+            assert b'Something went wrong-please try again' in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -235,15 +207,11 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         data = {'club': club['name'], 'competitions': competition['name']}
         url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
-        response = client.post(
-            url, data=data)
-
-        assert response.status_code == 200
-        assert b'Something went wrong-please try again' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post(url, data=data)
-            assert rv.status_code == 200
+            response = client.post(url, data=data)
+            assert response.status_code == 200
+            assert b'Something went wrong-please try again' in response.data
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
@@ -257,15 +225,11 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         data = {'club': club['name'], 'competitions': competition['name']}
         url = f"/book/{competition['name'].replace(' ', '%20')}/{club['name'].replace(' ', '%20')}"
-        response = client.post(
-            url, data=data)
-
-        assert response.status_code == 200
-        assert b'Something went wrong-please try again' in response.data
 
         with captured_templates(app) as templates:
-            rv = app.test_client().post(url, data=data)
-            assert rv.status_code == 200
+            response = client.post(url, data=data)
+            assert b'Something went wrong-please try again' in response.data
+            assert response.status_code == 200
             assert len(templates) == 1
             template, context = templates[0]
             assert template.name == 'welcome.html'
