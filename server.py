@@ -47,7 +47,7 @@ def book(competition, club):
         competition_date = datetime.strptime(
             foundCompetition[0]['date'], '%Y-%m-%d %H:%M:%S')
         if date_now < competition_date:
-            return render_template('booking.html', club=foundClub, competition=foundCompetition)
+            return render_template('booking.html', club=foundClub[0], competition=foundCompetition[0])
         else:
             flash("sorry, this competition allready took place")
             return render_template('welcome.html', club=club, competitions=competitions)
@@ -63,10 +63,10 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
     placesRequired = int(request.form['places'])
     if placesRequired <= 12:
-        if int(club['points']) - placesRequired >= 0:
+        if int(club['points']) - placesRequired*3 >= 0:
             competition['numberOfPlaces'] = int(
                 competition['numberOfPlaces'])-placesRequired
-            club['points'] = int(club['points']) - placesRequired
+            club['points'] = int(club['points']) - placesRequired*3
             flash('Great-booking complete!')
             return render_template('welcome.html', club=club, competitions=competitions)
         else:
