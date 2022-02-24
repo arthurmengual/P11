@@ -50,10 +50,10 @@ def book(competition, club):
             return render_template('booking.html', club=foundClub[0], competition=foundCompetition[0])
         else:
             flash("sorry, this competition allready took place")
-            return render_template('welcome.html', club=club, competitions=competitions)
+            return render_template('welcome.html', club=foundClub[0], competitions=competitions)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html', club=foundClub[0], competitions=competitions)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
