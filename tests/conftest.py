@@ -10,7 +10,7 @@ def client():
 
 @pytest.fixture
 def clubs_fixture():
-    clubs = {'clubs': [{'name': 'club_A', 'email': 'club_a@club_a.com', 'points': 5},
+    clubs = {'clubs': [{'name': 'club_A', 'email': 'club_a@club_a.com', 'points': 10},
                        {'name': 'club_B', 'email': 'club_b@club_b.com', 'points': 12},
                        {'name': 'club_C', 'email': 'club_c@club_c.com', 'points': 7}
                        ]

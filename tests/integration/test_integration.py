@@ -37,11 +37,7 @@ class Test_integration:
 
             # book places
             initial_club_points = int(club['points'])
-            places = 0
-            if int(club['points']) < int(competition['numberOfPlaces']):
-                places = int(club['points'])
-            else:
-                places = int(competition['numberOfPlaces'])
+            places = 1
             data = {'places': places, 'club': club['name'],
                     'competition': competition['name']}
             response = client.post('/purchasePlaces', data=data)
@@ -50,7 +46,7 @@ class Test_integration:
             assert len(templates) == 2
             template = templates[1]
             assert template.name == 'welcome.html'
-            assert int(club['points']) == initial_club_points - places
+            assert int(club['points']) == initial_club_points - places*3
 
     def test_login_book_past_competition_should_return_error_message(self, client, clubs_fixture, past_competitions_fixture, mocker):
         mocker.patch.object(server, 'clubs', clubs_fixture['clubs'])

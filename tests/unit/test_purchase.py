@@ -2,6 +2,7 @@ import server
 from server import app
 from flask import template_rendered
 from contextlib import contextmanager
+import math
 
 
 @contextmanager
@@ -93,8 +94,10 @@ class TestPurchase:
                             competitions_fixture['competitions'])
         club = clubs_fixture['clubs'][0]
         competition = competitions_fixture['competitions'][0]
-        data = {'places': int(
-            club['points']), 'club': club['name'], 'competition': competition['name']}
+        places = math.floor(int(
+            club['points']) / 3) - 1
+        data = {'places': places,
+                'club': club['name'], 'competition': competition['name']}
 
         with captured_templates(app) as templates:
             response = client.post('/purchasePlaces', data=data)
@@ -110,8 +113,10 @@ class TestPurchase:
                             competitions_fixture['competitions'])
         club = clubs_fixture['clubs'][0]
         competition = competitions_fixture['competitions'][0]
-        data = {'places': int(
-            club['points']-1), 'club': club['name'], 'competition': competition['name']}
+        places = math.floor(int(
+            club['points']) / 3)
+        data = {'places': places,
+                'club': club['name'], 'competition': competition['name']}
 
         with captured_templates(app) as templates:
             response = client.post('/purchasePlaces', data=data)
@@ -128,14 +133,14 @@ class TestPurchase:
         club = clubs_fixture['clubs'][0]
         initial_points = club['points']
         competition = competitions_fixture['competitions'][0]
-        nb_of_places = 4
+        nb_of_places = 2
         data = {
             'club': club['name'], 'competition': competition['name'], 'places': nb_of_places}
 
         with captured_templates(app) as templates:
             response = client.post('/purchasePlaces', data=data)
             updated_points = club['points']
-            expected_points = int(initial_points) - nb_of_places
+            expected_points = int(initial_points) - nb_of_places*3
             assert response.status_code == 200
             assert updated_points == expected_points
             assert len(templates) == 1
