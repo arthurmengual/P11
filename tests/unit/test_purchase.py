@@ -7,6 +7,7 @@ import math
 
 @contextmanager
 def captured_templates(app):
+    '''This function captures the templates to further verify which one was rendered'''
     recorded = []
 
     def record(sender, template, context, **extra):
@@ -23,6 +24,8 @@ class TestPurchase:
     def test_more_than_12_points_should_return_error_message(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book more than the authorized amount
+        of points to a competition and verifies the status_code, template rendered and error message'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -42,6 +45,8 @@ class TestPurchase:
     def test_12_points_should_return_200(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book the authorized amount
+        of points to a competition and verifies the status_code, template rendered'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -64,6 +69,8 @@ class TestPurchase:
     def test_less_than_12_points_should_return_200(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book less than the authorized amount
+        of points to a competition and verifies the status_code, template rendered'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -85,6 +92,8 @@ class TestPurchase:
     def test_more_than_club_points_should_return_error_message(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book more than the club amount
+        of points to a competition and verifies the status_code, template rendered and error message'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -108,6 +117,8 @@ class TestPurchase:
     def test_less_club_points_should_return_error_message(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book less than the club amount
+        of points to a competition and verifies the status_code, template rendered and error message'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -132,6 +143,8 @@ class TestPurchase:
     def test_equal_club_points_should_return_error_message(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book the club amount
+        of points to a competition and verifies the status_code, template rendered and error message'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -156,6 +169,8 @@ class TestPurchase:
     def test_points_should_be_updated(
         self, client, clubs_fixture, competitions_fixture, mocker
     ):
+        '''This test creates a client, book places to a competition and verifies the status_code,
+        template rendered and the new amount of club's points'''
         mocker.patch.object(server, "clubs", clubs_fixture["clubs"])
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
@@ -183,6 +198,8 @@ class TestPurchase:
     def test_book_past_competition_should_return_error_message(
         self, client, clubs_fixture, past_competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book places to a past competition
+        and verifies the status_code, template rendered and error message'''
         mocker.patch.object(
             server, "competitions", past_competitions_fixture["competitions"]
         )
@@ -207,6 +224,8 @@ class TestPurchase:
     def test_book_future_competition_should_return_error_message(
         self, client, clubs_fixture, past_competitions_fixture, mocker
     ):
+        '''This test creates a client, trie to book places to a future competition
+        and verifies the status_code, template rendered'''
         mocker.patch.object(
             server, "competitions", past_competitions_fixture["competitions"]
         )
@@ -236,6 +255,8 @@ class TestPurchase:
         no_competitions_fixture,
         mocker,
     ):
+        '''This test creates a client, trie to book places when there are no competition available
+        and verifies the status_code, template rendered and error message'''
         mocker.patch.object(
             server, "competitions", no_competitions_fixture["competitions"]
         )
@@ -256,6 +277,8 @@ class TestPurchase:
     def test_no_club_to_book(
         self, client, clubs_fixture, competitions_fixture, no_clubs_fixture, mocker
     ):
+        '''This test creates a client, trie to book places when there are no club available
+        and verifies the status_code, template rendered and error message'''
         mocker.patch.object(
             server, "competitions", competitions_fixture["competitions"]
         )
@@ -282,6 +305,8 @@ class TestPurchase:
         no_competitions_fixture,
         mocker,
     ):
+        '''This test creates a client, trie to book places when there are no competition and no club
+        available and verifies the status_code, template rendered and error message'''
         mocker.patch.object(
             server, "competitions", no_competitions_fixture["competitions"]
         )
