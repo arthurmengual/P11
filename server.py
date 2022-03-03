@@ -64,7 +64,7 @@ def book(competition, club):
     else:
         flash("Something went wrong-please try again")
         return render_template(
-            "welcome.html", club=foundClub[0], competitions=competitions
+            "welcome.html", club=club, competitions=competitions
         )
 
 

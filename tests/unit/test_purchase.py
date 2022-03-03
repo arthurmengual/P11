@@ -290,6 +290,7 @@ class TestPurchase:
 
         with captured_templates(app) as templates:
             response = client.post(url, data=data)
+            print('yoyo', response.data)
             assert response.status_code == 200
             assert b"Something went wrong-please try again" in response.data
             assert len(templates) == 1
